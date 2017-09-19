@@ -94,13 +94,13 @@ urls = {
 # are created when `manage.py create_test_users` is ran on sso.
 users = {
     'verified': {
-        'username': os.environ['SSO_USER_USERNAME'],
-        'password': os.environ['SSO_USER_PASSWORD'],
-        'token': os.environ['SSO_USER_TOKEN'],
-        'sso_id': int(os.environ['SSO_USER_SSO_ID'])
+        'username': os.environ.get('SSO_USER_USERNAME'),
+        'password': os.environ.get('SSO_USER_PASSWORD'),
+        'token': os.environ.get('SSO_USER_TOKEN'),
+        'sso_id': int(os.environ.get('SSO_USER_SSO_ID', 1))
     },
     'unverified': {
-        'token': os.environ['SSO_UNVERIFIED_USER_TOKEN']
+        'token': os.environ.get('SSO_UNVERIFIED_USER_TOKEN')
     }
 }
 
