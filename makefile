@@ -31,7 +31,7 @@ LOCUST := \
 SET_LOCUST_ENV_VARS := \
 	export DIRECTORY_API_URL=http://directory-api-dev.herokuapp.com/; \
 	export DIRECTORY_SSO_URL=http://www.dev.sso.uktrade.io/; \
-    export API_CLIENT_KEY=debug; \
+    export API_SIGNATURE_SECRET=debug; \
     export DIRECTORY_UI_BUYER_URL=http://dev.buyer.directory.uktrade.io/; \
 	export DIRECTORY_PROFILE_URL=http://www.dev.profile.uktrade.io; \
 	export DIRECTORY_UI_SUPPLIER_URL=http://dev.supplier.directory.uktrade.io/; \
@@ -71,7 +71,7 @@ PYTEST_ARGS :=
 	--driver-path /usr/bin/phantomjs $(pytest_args)
 
 SET_PYTEST_ENV_VARS := \
-	export API_CLIENT_KEY=debug; \
+	export API_SIGNATURE_SECRET=debug; \
 	export DIRECTORY_API_URL=http://directory-api-dev.herokuapp.com; \
 	export DIRECTORY_BUYER_API_URL=http://dev.buyer.directory.uktrade.io; \
 	export DIRECTORY_SSO_URL=http://www.dev.sso.uktrade.io; \
@@ -134,5 +134,27 @@ docker_integration_tests: docker_remove_all
 	docker-compose -f docker-compose.yml build && \
 	docker-compose -f docker-compose.yml run smoke_tests && \
 	docker-compose -f docker-compose.yml run functional_tests
+
+compile_requirements:
+	python3 -m piptools compile requirements.ini
+
+compile_functional_requirements:
+	python3 -m piptools compile requirements_functional.ini
+
+compile_load_requirements:
+	python3 -m piptools compile requirements_load.ini
+
+compile_smoke_requirements:
+	python3 -m piptools compile requirements_smoke.ini
+
+compile_selenium_requirements:
+	python3 -m piptools compile requirements_selenium.ini
+
+compile_all_requirements: compile_requirements
+	compile_functional_requirements
+	compile_load_requirements
+	compile_smoke_requirements
+	compile_selenium_requirements
+
 
 .PHONY: build clean requirements test docker_remove_all docker_integration_tests smoke_tests load_test load_test_buyer load_test_supplier load_test_sso load_test_minimal functional_tests pep8

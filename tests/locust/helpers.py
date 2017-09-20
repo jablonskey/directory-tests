@@ -1,6 +1,3 @@
-from hashlib import sha256
-from urllib.parse import urlsplit
-
 from locust.clients import LocustResponse, HttpSession
 
 import requests
@@ -12,6 +9,7 @@ from requests.exceptions import (
     InvalidURL
 )
 
+from sigauth.utils import RequestSigner
 from tests import settings
 
 
@@ -21,8 +19,8 @@ class AuthenticatedClient(HttpSession):
         try:
             request = requests.Request(method=method, url=url, **kwargs)
             signed_request = self.sign_request(
-                api_key=settings.API_CLIENT_KEY,
-                prepared_request=request.prepare(),
+                secret=settings.API_SIGNATURE_SECRET,
+                request=request.prepare(),
             )
             return requests.Session().send(signed_request)
         except (MissingSchema, InvalidSchema, InvalidURL):
@@ -34,22 +32,15 @@ class AuthenticatedClient(HttpSession):
             r.request = Request(method, url).prepare()
             return r
 
-    def sign_request(self, api_key, prepared_request):
-        url = urlsplit(prepared_request.path_url)
-        path = bytes(url.path, 'utf8')
-        if url.query:
-            path += bytes("?{}".format(url.query), 'utf8')
-
-        salt = bytes(api_key, 'utf8')
-        body = prepared_request.body or b""
-
-        if isinstance(body, str):
-            body = bytes(body, 'utf8')
-
-        signature = sha256(path + body + salt).hexdigest()
-        prepared_request.headers["X-Signature"] = signature
-
-        return prepared_request
+    def sign_request(self, secret, request):
+        signer = RequestSigner(secret=secret)
+        headers = signer.get_signature_headers(
+            url=request.path_url,
+            body=request.body,
+            method=request.method,
+            content_type=request.headers.get('Content-Type')
+        )
+        return request.headers.update(headers)
 
 
 class AuthedClientMixin(object):

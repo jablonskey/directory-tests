@@ -4,10 +4,11 @@
 #
 #    pip-compile --output-file requirements_load.txt requirements_load.ini
 #
+-e git+https://github.com/uktrade/directory-signature-auth.git@v1.0.0#egg=sigauth
 beautifulsoup4==4.5.3
 click==6.7                # via flask
-configparser==3.5.0       # via flake8
-enum34==1.1.6             # via flake8
+django==1.9.13
+djangorestframework==3.4.7
 flake8==3.0.4
 flask==0.12.2             # via locustio
 gevent==1.2.2             # via locustio
@@ -17,6 +18,7 @@ jinja2==2.9.6             # via flask
 locustio==0.8a2
 markupsafe==1.0           # via jinja2
 mccabe==0.5.3             # via flake8
+mohawk==0.3.4
 msgpack-python==0.4.8     # via locustio
 py==1.4.34                # via pytest
 pycodestyle==2.0.0        # via flake8
@@ -31,6 +33,6 @@ pytest==3.0.2
 pyzmq==15.2.0
 requests==2.11.1
 selenium==3.4.3           # via pytest-selenium
-six==1.10.0               # via locustio
+six==1.10.0               # via locustio, mohawk
 termcolor==1.1.0          # via pytest-sugar
 werkzeug==0.12.2          # via flask
