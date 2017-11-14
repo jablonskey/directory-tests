@@ -5,6 +5,7 @@ Feature: Articles
   @ED-2606
   @guidance
   @articles
+  @<category>
   Scenario Outline: Any Exporter accessing Articles through the Guidance Article List should be able to navigate to the next article
     Given "Robert" accessed "<category>" guidance articles using "home page"
     And "Robert" opened first Article from the list
@@ -26,6 +27,7 @@ Feature: Articles
   @ED-2613
   @personas
   @articles
+  @<relevant>
   Scenario Outline: "<relevant>" Exporter accessing Articles through the Export Readiness Article List should be able to navigate to the next article
     Given "Robert" accessed Export Readiness articles for "<relevant>" Exporters via "home page"
     And "Robert" opened any Article but the last one
@@ -43,6 +45,7 @@ Feature: Articles
 
   @ED-2605
   @progress
+  @<group>
   Scenario Outline: Any Exporter should see his progress through the articles list
     Given "Robert" is on the "<group>" Article List for randomly selected category
 
@@ -62,6 +65,7 @@ Feature: Articles
   @ED-2616
   @guidance
   @articles
+  @<category>
   Scenario Outline: Any Exporter accessing the last Article from the Guidance Article "<category>" List should not be able to navigate to the next article
     Given "Robert" accessed "<category>" guidance articles using "home page"
     And "Robert" opened any Article but the last one
@@ -83,6 +87,8 @@ Feature: Articles
 
   @ED-2628
   @articles
+  @<relevant>
+  @<location>
   Scenario Outline: "<relevant>" Exporter should see a list of relevant Export Readiness Articles when accessed via "<location>"
     Given "Robert" classifies himself as "<specific>" exporter
 
