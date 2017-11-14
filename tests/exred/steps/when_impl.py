@@ -77,7 +77,8 @@ def guidance_open_category(
         context: Context, actor_alias: str, category: str, location: str):
     if not get_actor(context, actor_alias):
         add_actor(context, unauthenticated_actor(actor_alias))
-    home.visit(driver=context.driver)
+    if location.lower() != "personalised journey":
+        home.visit(driver=context.driver)
     logging.debug(
         "%s is about to open Guidance '%s' category from %s",
         actor_alias, category, location)
@@ -371,6 +372,9 @@ def triage_classify_as(
     elif exporter_status == "regular":
         triage_classify_as_regular(
             context, actor_alias, incorporated, code, sector)
+    update_actor(
+        context, actor_alias, article_group="personalised journey",
+        article_category=exporter_status)
 
 
 def triage_should_see_answers_to_questions(context, actor_alias):
